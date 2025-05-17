@@ -97,6 +97,12 @@ Entity hierarchy:
   - Single-compatibility
   - Price override
 
+
+**DB**
+
+<img src="assets/db.png" alt="DB" width="600"/>
+
+
 ## 🛠️ Development
 
 *(general infraestructure  image )*
