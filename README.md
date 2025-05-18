@@ -1,6 +1,25 @@
-# 🚴 Marcus Shop – Custom Product Platform
+# 🚴 Marcus Shop – Custom Product App
+
+We sell customizable bikes! 🛠️  
+Try the live demo [here](https://5ae1-37-223-100-58.ngrok-free.app/).
+
+---
+
+## 🐳 Quick Start with Docker
+
+```bash
+git clone https://github.com/jordi-bird/marcus-shop.git
+cd marcus-shop
+docker-compose up --build
+```
+
+
+
+Alternatively you can configure locally, with ruby 3.2.2, rails 8.0.2 and react ^19.1. Run ./backend/setup_db.sh in order to create postgreSQL database.
 
 ## 🧠 Abstract
+
+
 
 This project details the analysis and implementation of a scalable environment for product customization, based on a collection of existing options. Each option may behave differently depending on other selections via a set of predefined rules.
 
@@ -65,11 +84,10 @@ The system is designed to **scale** to support new product types (e.g., skis, su
 
 ### 🔒 Strong Assumptions
 - Most options are compatible
-- Incompatibilities are reciprocal
+- Incompatibilities are reciprocal between options
 - Exclusive compatibilities are *not necessarily* reciprocal
 - Parts may have hierarchical relationships
 - Lowest-level parts must have attributes
-- Configured item is the "product" (not necessarily parts)
 
 ### 🧪 Flexible Assumptions
 - Part hierarchies: max 3 levels
@@ -78,7 +96,8 @@ The system is designed to **scale** to support new product types (e.g., skis, su
 - Conditions between options (future: option ↔ part)
 - All attributes must be selected for checkout
 - User selection may become non-progressive
-- ‘Product’ term is intentionally avoided
+- ‘Product’ term is intentionally avoided as marcus may sell individual parts in future.
+- Rules are always displayed below their options for testing purposes.
 
 ---
 
@@ -98,14 +117,15 @@ Entity hierarchy:
   - Price override
 
 
-**DB**
+DB Shema
 
-<img src="assets/db.png" alt="DB" width="600"/>
+<img src="assets/db.png" alt="DB" width="800"/>
 
 
 ## 🛠️ Development
 
-*(general infraestructure  image )*
+
+<img src="assets/infrastructure.png" alt="Infrastructure" width="800"/>
 
 ### 🔙 Backend
 
@@ -151,11 +171,10 @@ Built with Ruby on Rails and GraphQL.
   - Deletes **reciprocal** rules where option is **target**
   - New rules are created based on input
 
-### 📊 Backend Architecture
+### 🌳 Backend Architecture
 
-*(backend architecture image )*
+<img src="backend/public/backend.png" alt="Backend" width="800"/>
 
----
 
 ### 🖥️ Frontend
 
@@ -171,9 +190,9 @@ Flow to assemble a product with real-time updates.
 
 - **Item Configurator**:
   - Holds selected options
-  - Applies `single-compatibility` rules
+  - Stores selected `single-compatibility` rules
   - Calculates final price
-  - Checks if all required options are selected
+  - Checks if all required options are selected to proceed to checkout
 
 - **Part Section**:
   - Manages child parts recursively
@@ -181,22 +200,16 @@ Flow to assemble a product with real-time updates.
 
 - **Attribute Block**:
   - Core logic for option selection
-  - Evaluates whether each option is:
+  - Evaluates whether each option is elegible based on:
     - `Incompatible`
-    - `Blocked by Compatibility`
-    - `Blocked by Previous Selection (that defines an exclusive compatibility)`
+    - `Blocked by Single Compatibility (there is a selected option that is source rule)`
+    - `Blocked by Previous Selection (the option (source) is only compatible with another option (target) which is not selected, but the target attribute has another selected option)`
     - `Out of Stock`
 
 - **Option Selector**:
   - Renders UI for selectable options
   - Displays tooltips with rule info (currently verbose for testing)
   - Triggers selection changes
-
-#### 🧭 Product Configuration Workflow
-
-*(frontend workflow image)*
-
----
 
 #### Back Office
 
@@ -209,6 +222,12 @@ CRUD UI for all entities.
 - **RuleList**
 
 Each form allows create, edit, and delete actions. Option forms include rule management for simplicity.
+
+---
+
+#### 👤 Front-end Schema
+
+<img src="frontend/public/frontend.png" alt="Frontend" width="800"/>
 
 ---
 
@@ -228,4 +247,4 @@ Enhancements planned:
 
 ## ✅ Conclusions
 
-This project provides a robust foundation for customizable product sales, focused on scalability, flexibility, and clarity. With a modular backend and reusable frontend..
+This project provides a robust basis for customizable product sales, focused on scalability, flexibility, and clarity. With a modular backend and reusable frontend, it presents a simple yet effective 4 level entity structure and avoids storing redundant information by using a rule engine. The app allows the owner to set conditional prices and compatibilities between options over any kind of product. 
