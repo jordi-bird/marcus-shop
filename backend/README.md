@@ -1,24 +1,48 @@
-# README
+# 🔙 Backend
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Built with Ruby on Rails and GraphQL.
 
-Things you may want to cover:
+**Components**:
+- Models
+- Types
+- Resolvers
+- Mutations
+- Tests (RSpec + FactoryBot)
 
-* Ruby version
+**Basic Setup**:
+- Enable CORS for React (port `5173`)
+- GraphQL 2.5 minimal configuration
+- Additional Gems: `rspec-rails`, `factory_bot_rails`
 
-* System dependencies
+**Architecture**:
+- `Item`: retrieves top-level parts (`parent_id` is null)
+- `ItemPart`: retrieves its own child parts (recursive tree)
+- `ItemPartAttribute`: standard ActiveRecord model
+- `AttributeOption`:
+  - Retrieves rules where option is **source** or **target**
+  - Avoids front-end complexity when handling option relations
+- `Rule`: validates logic depending on rule type
 
-* Configuration
+#### GraphQL Patterns
 
-* Database creation
+- `Create`: expects full parameters + parent component ID
+- `Update`: uses component ID + parameters
+- `Delete`: only needs the ID
 
-* Database initialization
+#### Encapsulated vs Separated Inputs
 
-* How to run the test suite
+- Most mutations use separated parameters
+- AttributeOption `create/update` use encapsulated input due to multiple related params
 
-* Services (job queues, cache servers, search engines, etc.)
+#### Option Manages Rules
 
-* Deployment instructions
+- Rules are handled within `Option` mutations
+- Updating an option:
+  - Deletes rules where option is **source**
+  - Deletes **reciprocal** rules where option is **target**
+  - New rules are created based on input
 
-* ...
+### 🌳 Backend Architecture
+
+
+<img src="public/backend.png" alt="Backend" width="800"/>
