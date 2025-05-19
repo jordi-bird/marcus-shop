@@ -124,12 +124,13 @@ DB Shema
 
 ## 🛠️ Development
 
+General Infraestructure Diagram
 
 <img src="assets/infrastructure.png" alt="Infrastructure" width="800"/>
 
 ### 🔙 Backend
 
-Built with Ruby on Rails and GraphQL.
+Built with Ruby on Rails and GraphQL. Manages the product data to retrieve the structured information considering the 4-level entity hierarchy, the parent-child relations between parts and rules attached to options (either the option is source or target). It also manages Create, Update & Delete operations to craft the products to be chosen.
 
 **Components**:
 - Models
@@ -141,7 +142,7 @@ Built with Ruby on Rails and GraphQL.
 **Basic Setup**:
 - Enable CORS for React (port `5173`)
 - GraphQL 2.5 minimal configuration
-- Additional Gems: `rspec-rails`, `factory_bot_rails`
+- Additional Gems for testing: `rspec-rails`, `factory_bot_rails`
 
 **Architecture**:
 - `Item`: retrieves top-level parts (`parent_id` is null)
@@ -172,9 +173,11 @@ Built with Ruby on Rails and GraphQL.
   - New rules are created based on input
 
 ### 🌳 Backend Architecture
+---
 
 <img src="backend/public/backend.png" alt="Backend" width="800"/>
 
+---
 
 ### 🖥️ Frontend
 
@@ -184,7 +187,7 @@ Built with React, split into two flows:
 
 #### Product Configuration
 
-Flow to assemble a product with real-time updates.
+Flow to assemble a product with real-time updates. The customer can select a product to configure. Inside the form it is required to select a single option for each possible attribute. Some options may be disabled or have price modifications based on previous selections. Once all options are selected, it is allowed to proceed to checkout.
 
 ##### Components
 
@@ -211,6 +214,11 @@ Flow to assemble a product with real-time updates.
   - Displays tooltips with rule info (currently verbose for testing)
   - Triggers selection changes
 
+- **Checkout Page**:
+  - Stores the array of selected options temporarily in local storage 
+  - Renders the summary of selected options with prices
+  - Displays small form to fulfill the customer data.
+
 #### Back Office
 
 CRUD UI for all entities.
@@ -235,6 +243,9 @@ Each form allows create, edit, and delete actions. Option forms include rule man
 
 Enhancements planned:
 
+- 👤 Manage Users:
+  - Admin Roles to store user id in item
+  - Customer Role to store user id along with selected options as a serialized array
 - 🌐 Multi-language support
 - 🚨 Alerts & validation messages
 - 🔁 Multiple options per attribute
@@ -242,6 +253,7 @@ Enhancements planned:
 - 🔗 Option ↔ Part conditions
 - 🧩 Option categories/properties (e.g., brand, provider)
 - 🧠 Compatibility based on shared properties
+- 👨‍🔬 Improve testing with logical inconsistencies (eg: option incompatible and price modifier within same target option)
 
 ---
 
